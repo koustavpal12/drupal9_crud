@@ -1,0 +1,52 @@
+<?php
+/*
+function crud_example_install() {
+    drupal_install_schema('crud_example');
+}
+*/
+/**
+ * Uninstalls the database schema.
+ */
+/*
+function crud_example_uninstall() {
+    drupal_uninstall_schema('crud_example');
+}
+*/
+function crud_example_schema() {
+    $schema['crud_example'] = array(
+        'description' => 'TODO: please describe this table!',
+        'fields' => array(
+            'wid' => array(
+                'description' => 'primary key!',
+                'type' => 'serial',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+            ),
+            'first_name' => array(
+                'description' => 'TODO: please describe this field!',
+                'type' => 'varchar',
+                'length' => 12,
+                'not null' => TRUE,
+
+            ),
+            'last_name' => array(
+                'description' => 'TODO: please describe this field!',
+                'type' => 'varchar',
+                'length' => 12,
+                'not null' => TRUE,
+            ),
+            'email' => array(
+                'description' => 'TODO: please describe this field!',
+                'type' => 'varchar',
+                'length' => 50,
+                'not null' => TRUE,
+            ),
+        ),
+        'primary key' => array(
+          'wid',
+        ),
+    );
+    return $schema;
+}
+
+?>

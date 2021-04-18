@@ -1,0 +1,6 @@
+name: CRUD custom module example
+description: CRUD operation from custom module
+package: Custom
+core_version_requirement: ^8 || ^9
+type: module
+core: 8.x

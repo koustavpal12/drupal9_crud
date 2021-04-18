@@ -1,0 +1,32 @@
+crud_example.content:
+  path: '/crud_example'
+  defaults:
+    _controller: '\Drupal\crud_example\Controller\DefaultController::content'
+    _title: 'list page'
+  requirements:
+    _permission: 'access content'
+
+crud_example.add:
+  path: '/crud_example/add-form'
+  defaults:
+      _form: 'Drupal\crud_example\Form\AddForm'
+      _title: 'Personal information'
+  requirements:
+      _permission : 'TRUE'
+
+crud_example.edit:
+  path: '/crud_example/edit-form/{wid}'
+  defaults:
+      _form: 'Drupal\crud_example\Form\EditForm'
+      _title: 'Personal information edit'
+  requirements:
+      _permission : 'TRUE'
+
+crud_example.delete:
+  path: '/crud_example/delete-form/{wid}'
+  defaults:
+      _form: 'Drupal\crud_example\Form\DeleteForm'
+      _title: 'Personal information delete'
+  requirements:
+      _permission : 'TRUE'
+
