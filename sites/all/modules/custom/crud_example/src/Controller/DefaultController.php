@@ -26,11 +26,6 @@ class DefaultController
   public function content()
   {
 
-    //Get parameter value while submitting filter form
-    $fname = \Drupal::request()->query->get('fname');
-    $lname = \Drupal::request()->query->get('lname');
-    $email = \Drupal::request()->query->get('email');
-
     //====load filter controller
     $form_class = '\Drupal\crud_example\Form\FilterForm';
     $data['form'] = \Drupal::formBuilder()->getForm($form_class);
@@ -55,37 +50,19 @@ class DefaultController
       array('data' => t('Delete')),
     );
 
-    $conn = Database::getConnection();
-    $query = $conn->select('crud_example', 'm');
-    $query->fields('m', ['wid', 'first_name', 'last_name', 'email']);
+    //Get parameter value while submitting filter form
+    $param = array();
 
-    if($fname) {
-      $query->condition('first_name', $fname);
-    }
-    if($lname) {
-      $query->condition('last_name', $lname);
-    }
-    if($lname) {
-      $query->condition('email', $email);
-    }
+    $param['fname'] = \Drupal::request()->query->get('fname');
+    $param['lname'] = \Drupal::request()->query->get('lname');
+    $param['email'] = \Drupal::request()->query->get('email');
 
-    $sorted_query = $query->extend('Drupal\Core\Database\Query\TableSortExtender');
-    $sorted_query->orderByHeader($header);
-
-    $paged_query = $sorted_query->extend('Drupal\Core\Database\Query\PagerSelectExtender');
-    $paged_query->limit(10);
-    $results = $paged_query->execute()->fetchAll();
-
-    $row = array();
-
-    foreach ($results as $value) {
-      $row[] = ['wid' => $value->wid, 'first_name' => $value->first_name, 'last_name' => $value->last_name, 'email' => $value->email, 'opt' => Link::fromTextAndUrl('Edit', Url::fromUserInput('/crud_example/edit-form/' . $value->wid)), 'opt1' => Link::fromTextAndUrl('Delete', Url::fromUserInput('/crud_example/delete-form/' . $value->wid))];
-    }
+    $param['header'] = $header;
 
     $data['table'] = [
       '#type' => 'table',
       '#header' => $header,
-      '#rows' => $row,
+      '#rows' => $this->get_records($param),
       '#empty' => t('No record found'),
       '#caption' => Link::fromTextAndUrl('Add User', Url::fromUserInput('/crud_example/add-form')),
     ];
@@ -96,5 +73,38 @@ class DefaultController
 
     //$this->messenger()->addMessage('Records Listed');
     return $data;
+  }
+
+  public function get_records($param)
+  {
+    $conn = Database::getConnection();
+    $query = $conn->select('crud_example', 'm');
+    $query->fields('m', ['wid', 'first_name', 'last_name', 'email']);
+
+    if (!empty($param['fname'])) {
+      $query->condition('first_name', $param['fname']);
+    }
+    if (!empty($param['lname'])) {
+      $query->condition('last_name', $param['lname']);
+    }
+    if (!empty($param['email'])) {
+      $query->condition('email', $param['email']);
+    }
+
+    $sorted_query = $query->extend('Drupal\Core\Database\Query\TableSortExtender');
+    $sorted_query->orderByHeader($param['header']);
+
+    $paged_query = $sorted_query->extend('Drupal\Core\Database\Query\PagerSelectExtender');
+    $paged_query->limit(10);
+
+    $results = $paged_query->execute()->fetchAll();
+
+    $row = array();
+
+    foreach ($results as $value) {
+      $row[] = ['wid' => $value->wid, 'first_name' => $value->first_name, 'last_name' => $value->last_name, 'email' => $value->email, 'opt' => Link::fromTextAndUrl('Edit', Url::fromUserInput('/crud_example/edit-form/' . $value->wid)), 'opt1' => Link::fromTextAndUrl('Delete', Url::fromUserInput('/crud_example/delete-form/' . $value->wid))];
+    }
+
+    return $row;
   }
 }
