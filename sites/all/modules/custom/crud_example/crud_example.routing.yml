@@ -2,7 +2,7 @@ crud_example.content:
   path: '/crud_example'
   defaults:
     _controller: '\Drupal\crud_example\Controller\DefaultController::content'
-    _title: 'list page'
+    _title: 'CRUD Module index page'
   requirements:
     _permission: 'access content'
 
@@ -29,4 +29,5 @@ crud_example.delete:
       _title: 'Personal information delete'
   requirements:
       _permission : 'TRUE'
+
 

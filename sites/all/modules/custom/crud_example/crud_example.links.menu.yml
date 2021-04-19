@@ -1,0 +1,7 @@
+crud_example.front:
+  title: 'CRUD Module'
+  description: 'example of how to make an custom crud module'
+  parent: main
+  menu_name: main
+  route_name: crud_example.content
+  weight: 100
