@@ -15,9 +15,6 @@
 namespace Drupal\crud_example\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Database\Database;
-use Drupal\Core\Url;
-use Drupal\Core\Link;
 use Durpal\Core\Messenger;
 
 class DefaultController
@@ -62,9 +59,9 @@ class DefaultController
     $data['table'] = [
       '#type' => 'table',
       '#header' => $header,
-      '#rows' => $this->get_records($param),
+      '#rows' => get_records($param),
       '#empty' => t('No record found'),
-      '#caption' => Link::fromTextAndUrl('Add User', Url::fromUserInput('/crud_example/add-form')),
+      '#caption' => getLink('Add User', '/crud_example/add-form'),
     ];
 
     $data['pager'] = array(
@@ -75,36 +72,5 @@ class DefaultController
     return $data;
   }
 
-  public function get_records($param)
-  {
-    $conn = Database::getConnection();
-    $query = $conn->select('crud_example', 'm');
-    $query->fields('m', ['wid', 'first_name', 'last_name', 'email']);
 
-    if (!empty($param['fname'])) {
-      $query->condition('first_name', $param['fname']);
-    }
-    if (!empty($param['lname'])) {
-      $query->condition('last_name', $param['lname']);
-    }
-    if (!empty($param['email'])) {
-      $query->condition('email', $param['email']);
-    }
-
-    $sorted_query = $query->extend('Drupal\Core\Database\Query\TableSortExtender');
-    $sorted_query->orderByHeader($param['header']);
-
-    $paged_query = $sorted_query->extend('Drupal\Core\Database\Query\PagerSelectExtender');
-    $paged_query->limit(10);
-
-    $results = $paged_query->execute()->fetchAll();
-
-    $row = array();
-
-    foreach ($results as $value) {
-      $row[] = ['wid' => $value->wid, 'first_name' => $value->first_name, 'last_name' => $value->last_name, 'email' => $value->email, 'opt' => Link::fromTextAndUrl('Edit', Url::fromUserInput('/crud_example/edit-form/' . $value->wid)), 'opt1' => Link::fromTextAndUrl('Delete', Url::fromUserInput('/crud_example/delete-form/' . $value->wid))];
-    }
-
-    return $row;
-  }
 }

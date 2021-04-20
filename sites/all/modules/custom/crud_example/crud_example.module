@@ -1,1 +1,42 @@
 <?php
+
+use Drupal\Core\Database\Database;
+use Drupal\Core\Url;
+use Drupal\Core\Link;
+
+function getLink($lbl,$segment) {
+  return Link::fromTextAndUrl($lbl, Url::fromUserInput($segment));
+}
+
+function get_records($param)
+  {
+    $conn = Database::getConnection();
+    $query = $conn->select('crud_example', 'm');
+    $query->fields('m', ['wid', 'first_name', 'last_name', 'email']);
+
+    if (!empty($param['fname'])) {
+      $query->condition('first_name', $param['fname']);
+    }
+    if (!empty($param['lname'])) {
+      $query->condition('last_name', $param['lname']);
+    }
+    if (!empty($param['email'])) {
+      $query->condition('email', $param['email']);
+    }
+
+    $sorted_query = $query->extend('Drupal\Core\Database\Query\TableSortExtender');
+    $sorted_query->orderByHeader($param['header']);
+
+    $paged_query = $sorted_query->extend('Drupal\Core\Database\Query\PagerSelectExtender');
+    $paged_query->limit(10);
+
+    $results = $paged_query->execute()->fetchAll();
+
+    $row = array();
+
+    foreach ($results as $value) {
+      $row[] = ['wid' => $value->wid, 'first_name' => $value->first_name, 'last_name' => $value->last_name, 'email' => $value->email, 'opt' => getLink('Edit', '/crud_example/edit-form/' . $value->wid), 'opt1' => getLink('Delete', '/crud_example/delete-form/' . $value->wid)];
+    }
+
+    return $row;
+  }
