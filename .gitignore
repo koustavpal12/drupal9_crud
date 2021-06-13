@@ -4,3 +4,4 @@ sites/*/private
 
 # Ignore SimpleTest multi-site environment.
 sites/simpletest
+/nbproject/private/

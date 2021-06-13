@@ -28,18 +28,18 @@ class EditForm extends FormBase
     // Create a $form API array.
     $form['first_name'] = array(
       '#type' => 'textfield',
-      '#title' => $this->t('First Name'),
+      '#title' => t('First Name'),
       '#default_value' => $results['first_name']
     );
     $form['last_name'] = array(
       '#type' => 'textfield',
-      '#title' => $this->t('Last Name'),
+      '#title' => t('Last Name'),
       '#default_value' => $results['last_name']
 
     );
     $form['email'] = array(
       '#type' => 'textfield',
-      '#title' => $this->t('Email'),
+      '#title' => t('Email'),
       '#default_value' => $results['email']
     );
     $form['wid'] = array(
@@ -48,9 +48,15 @@ class EditForm extends FormBase
     );
     $form['save'] = array(
       '#type' => 'submit',
-      '#value' => $this->t('Save'),
+      '#value' => t('Save'),
     );
     return $form;
+    /*
+    $data_theme['#theme'] = 'crud_example_addform';
+    $data_theme['#form'] = $form;
+        
+    return $data_theme;*/
+    
   }
   public function validateForm(array &$form, FormStateInterface $form_state)
   {

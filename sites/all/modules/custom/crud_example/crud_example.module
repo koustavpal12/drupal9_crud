@@ -4,6 +4,23 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
 
+function crud_example_theme($existing, $type, $theme, $path) {
+  return [
+    'crud_example_content' => [
+      'variables' => [
+        'data' => NULL,
+        'extra_var' => NULL
+      ]
+    ],
+    'crud_example_addform' => [
+      'variables' => [
+        'form' => NULL
+      ],
+      'render element' => 'form'
+    ],
+  ];
+}
+
 function getLink($lbl,$segment) {
   return Link::fromTextAndUrl($lbl, Url::fromUserInput($segment));
 }

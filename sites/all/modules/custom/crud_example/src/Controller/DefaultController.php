@@ -68,8 +68,18 @@ class DefaultController
       '#type' => 'pager'
     );
 
+    $data_theme['#theme'] = 'crud_example_content';
+    $data_theme['#data'] = $data;
+    $data_theme['#extra_var'] = t('Test Value');
+    
     //$this->messenger()->addMessage('Records Listed');
-    return $data;
+    return $data_theme;
+    /*
+    return [
+      '#theme' => 'crud_example',
+      '#test_var' => t('Test Value'),
+    ];*/
+    
   }
 
 
